@@ -1,5 +1,11 @@
 import { Link } from "react-router-dom";
 import "./default.css";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  isLoginState,
+  loginIdState,
+  memberTypeState,
+} from "../utils/RecoilData";
 const Header = () => {
   return (
     <header className="header">
@@ -36,14 +42,39 @@ const MainNavi = () => {
 };
 
 const HeaderLink = () => {
+  const [loginId, setLoginId] = useRecoilState(loginIdState); //가져와서 쓰는거라 위에서 내려서 안줘도 된다
+  const [memberType, setMemberType] = useRecoilState(memberTypeState);
+
+  const isLogin = useRecoilValue(isLoginState);
+  //console.log("header : " + loginId, memberType);
+  const logout = () => {
+    setLoginId("");
+    setMemberType(0);
+  };
+
   return (
     <ul className="user-menu">
-      <li>
-        <Link to="#">로그인</Link>
-      </li>
-      <li>
-        <Link to="/join">회원가입</Link>
-      </li>
+      {isLogin ? ( // ? true : false
+        <>
+          <li>
+            <Link to="#">{loginId}</Link>
+          </li>
+          <li>
+            <Link to="#" onClick={logout}>
+              로그아웃
+            </Link>
+          </li>
+        </>
+      ) : (
+        <>
+          <li>
+            <Link to="/login">로그인</Link>
+          </li>
+          <li>
+            <Link to="/join">회원가입</Link>
+          </li>
+        </>
+      )}
     </ul>
   );
 };

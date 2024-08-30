@@ -3,3 +3,9 @@ git.ignore
 윤희수 2024-08-29 17:05
 npm install react-router-dom 
 npm install axios
+
+윤희수 2024-08-30 11:57
+npm install sweetalert2
+
+윤희수 2024-08-30 17:02
+npm install recoil
