@@ -8,8 +8,11 @@ import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import kr.co.iei.member.model.dto.LoginMemberDTO;
+import kr.co.iei.member.model.dto.MemberDTO;
 
 @Component
 public class JwtUtils {
@@ -29,6 +32,7 @@ public class JwtUtils {
 		Calendar c = Calendar.getInstance();//현재시간으로 먼저 만든다.
 		Date startTime = c.getTime();
 		c.add(Calendar.HOUR, expireHour);
+		//c.add(Calendar.SECOND, 30); //1년짜리 토큰이 있기에 로그인이 안풀린다
 		Date expireTime = c.getTime();
 		String token = Jwts.builder()                   //JWT생성 시작
 						.issuedAt(startTime)			//토큰발행 시작시간
@@ -58,4 +62,24 @@ public class JwtUtils {
 						.compact();						//생성
 		return token;
 	}
+	
+	//토큰을 받아서 확인 
+	public LoginMemberDTO checkToken(String token) {
+		//1. 토큰 해석을 위한 암호화 생성
+		SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
+		Claims claims = (Claims) Jwts.parser()			//토큰해석 시작
+									.verifyWith(key)	//암호화키
+									.build()
+									.parse(token)
+									.getPayload();
+		String memberId = (String)claims.get("memberId");
+		int memberType =(int)claims.get("memberType");
+		//System.out.println(memberId);
+		//System.out.println(memberType);
+		LoginMemberDTO loginMemberDTO = new LoginMemberDTO();
+		loginMemberDTO.setMemberId(memberId);
+		loginMemberDTO.setMemberType(memberType);
+		return loginMemberDTO;
+	}
+	
 }

@@ -3,10 +3,13 @@ package kr.co.iei.member.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -45,5 +48,56 @@ public class MemberController {
 		}else {
 			return ResponseEntity.status(404).build();
 		}
+	}
+	//토큰 작성하는 방법 보기 위한 로직
+	/*
+	@GetMapping
+	public ResponseEntity<MemberDTO> getMember(@RequestHeader("Authorization") String token){
+		System.out.println("token"+token); //mypage 이동시 받은 토큰
+		MemberDTO member = memberService.selectOneMember(token);
+		return ResponseEntity.ok(null);
+	}
+	*/
+
+	@PostMapping(value = "/refresh")
+	public ResponseEntity<LoginMemberDTO> refresh(@RequestHeader("Authorization") String token){
+		LoginMemberDTO loginMember = memberService.refresh(token);
+		if(loginMember != null) {
+			return ResponseEntity.ok(loginMember);
+		}else {
+			return ResponseEntity.status(404).build();
+		}
+			
+	}
+	
+	@GetMapping
+	public ResponseEntity<MemberDTO> selectOneMember(@RequestHeader("Authorization") String token){
+
+		MemberDTO member = memberService.selectOneMember(token);
+		return ResponseEntity.ok(member);
+	}
+	
+	@PatchMapping
+	public ResponseEntity<Integer> updatemember(@RequestBody MemberDTO member){
+		int result = memberService.updateMember(member);
+		return ResponseEntity.ok(result);
+	}
+	
+	@PostMapping(value = "/pw")
+	public ResponseEntity<Integer> checkPw(@RequestBody MemberDTO member){
+		int result = memberService.checkPw(member);
+		return ResponseEntity.ok(result);
+	}
+
+	@PatchMapping(value = "/pw")
+	public ResponseEntity<Integer> changePw(@RequestBody MemberDTO member){
+		int result = memberService.changePw(member);
+		return ResponseEntity.ok(result);
+	}
+	
+	@DeleteMapping                               //보내주는 정보가 없어도 로그인이 되어 있으면 토큰 요청 가능
+	public ResponseEntity<Integer> deleteMember(@RequestHeader("Authorization") String token){
+		int result = memberService.deleteMember(token);
+		return ResponseEntity.ok(result);
 	}
 }
