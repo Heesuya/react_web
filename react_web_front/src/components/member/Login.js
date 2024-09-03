@@ -9,8 +9,8 @@ const Login = () => {
   //recoil저장소에 접근하는 방법
   const [loginId, setLoginId] = useRecoilState(loginIdState);
   const [memberType, setMemberType] = useRecoilState(memberTypeState);
-  console.log(loginId);
-  console.log(memberType);
+  //console.log(loginId);
+  //console.log(memberType);
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const navigate = useNavigate();
   const [member, setMember] = useState({ memberId: "", memberPw: "" });

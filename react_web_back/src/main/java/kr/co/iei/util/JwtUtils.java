@@ -12,7 +12,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import kr.co.iei.member.model.dto.LoginMemberDTO;
-import kr.co.iei.member.model.dto.MemberDTO;
 
 @Component
 public class JwtUtils {
