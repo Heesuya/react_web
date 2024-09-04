@@ -21,6 +21,6 @@ public class BoardDTO {
 	private String boardContent;
 	private String boardWriter;
 	private int boardStatus;
-	private String boardData;
+	private String boardDate;
 	private List<BoardFileDTO> fileList;
 }
