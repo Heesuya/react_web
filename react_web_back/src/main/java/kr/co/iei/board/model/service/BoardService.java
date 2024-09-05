@@ -50,4 +50,20 @@ public class BoardService {
 		//board.setFileList(fileList);
 		return board;
 	}
+
+	public BoardFileDTO getBoardFile(int boardFileNo) {
+		BoardFileDTO boardFile = boardDao.getBoardFile(boardFileNo);
+		return boardFile;
+	}
+
+	@Transactional
+	public List<BoardFileDTO> deleteBoard(int boardNo) {
+		List<BoardFileDTO> fileList = boardDao.selectOneBoardFileList(boardNo);
+		int result = boardDao.deleteBoard(boardNo);
+		if(result > 0) {
+			return fileList;
+		}else {
+			return null;
+		}
+	}
 }

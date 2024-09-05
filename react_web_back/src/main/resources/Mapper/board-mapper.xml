@@ -56,4 +56,10 @@
 			>
 		</collection>
 	</resultMap>
+	<select id="getBoardFile" resultType="boardFile">
+		select * from board_file where board_file_no=#{boardFileNo}
+	</select>
+	<delete id="deleteBoard">
+		delete from board where board_no=#{boardNo}
+	</delete>
 </mapper>

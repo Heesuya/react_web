@@ -1,13 +1,22 @@
 package kr.co.iei.board.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -77,5 +86,42 @@ public class BoardController {
 	public ResponseEntity<BoardDTO> selectOneBoard(@PathVariable int boardNo){
 		BoardDTO board = boardServcie.selectOneBoard(boardNo);
 		return ResponseEntity.ok(board);
+	}
+	
+	@GetMapping(value = "/file/{boardFileNo}")//특정데이터가 아닌 자원(파일리소스)자체를 되돌려 주겠다   //throws 스프링 컨테인에 에러처리
+	public ResponseEntity<Resource> filedown(@PathVariable int boardFileNo) throws FileNotFoundException{
+		BoardFileDTO boardFile = boardServcie.getBoardFile(boardFileNo);
+		String savepath = root+"/board/";
+		File file = new File(savepath+boardFile.getFilepath());
+		Resource resource = new InputStreamResource(new FileInputStream(file));
+		//파일다운로드를 위한 헤더 설정 
+		HttpHeaders header = new HttpHeaders();
+		//header.add("Content-Disposition", "attachment; filename=\""+boardFile.getFilename()+"\"");//파일의 이름 //filename="filename" 
+		//캐시서버 둠 - 넷플릭스 등등 사용하지만, 우리는 사용지 않아서 캐시 사용하지 않음 설정함
+		header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+		header.add("Pragma", "no-cache");//옛날 브라우저에게 알려줄때 설정
+		header.add("Expires", "0");//전송 끝나면 0을 알려주겠다 
+		
+		return ResponseEntity
+					.status(HttpStatus.OK)
+					.headers(header)
+					.contentLength(file.length()) //파일용량 크면 얼마나 걸리는지
+					.contentType(MediaType.APPLICATION_OCTET_STREAM)
+					.body(resource);
+	}
+	
+	@DeleteMapping(value = "/{boardNo}")
+	public ResponseEntity<Integer> deleteBoard(@PathVariable int boardNo){
+		List<BoardFileDTO> delFileList = boardServcie.deleteBoard(boardNo);
+		if(delFileList != null) {
+			String savepath = root+"/board/";
+			for(BoardFileDTO boardFile : delFileList) {
+				File delFile = new File(savepath + boardFile.getFilepath());
+				delFile.delete();
+			}
+			return ResponseEntity.ok(1);
+		}else {
+			return ResponseEntity.ok(0);
+		}
 	}
 }

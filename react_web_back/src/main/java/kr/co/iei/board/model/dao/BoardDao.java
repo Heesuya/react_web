@@ -23,4 +23,8 @@ public interface BoardDao {
 
 	List<BoardFileDTO> selectOneBoardFileList(int boardNo);
 
+	BoardFileDTO getBoardFile(int boardFileNo);
+
+	int deleteBoard(int boardNo);
+
 }
