@@ -4,6 +4,7 @@ import "./board.css";
 import BoardWrite from "./BoardWrite";
 import BoardFrm from "./BoardFrm";
 import BoardView from "./BoardView";
+import BoardUpdate from "./BoardUpdate";
 
 const BoardMain = () => {
   return (
@@ -11,6 +12,7 @@ const BoardMain = () => {
       <Route path="list" element={<BoardList />} />
       <Route path="write" element={<BoardWrite />} />
       <Route path="view/:boardNo" element={<BoardView />} />
+      <Route path="update/:boardNo" element={<BoardUpdate />} />
     </Routes>
   );
 };

@@ -98,7 +98,10 @@ const BoardView = () => {
         </div>
         {loginId === board.boardWriter ? (
           <div className="view-btn-zone">
-            <Link to="#" className="btn-primary lg">
+            <Link
+              to={`/board/update/${board.boardNo}`}
+              className="btn-primary lg"
+            >
               수정
             </Link>
             <button

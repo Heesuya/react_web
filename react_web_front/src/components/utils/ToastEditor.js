@@ -6,11 +6,13 @@ const ToastEditor = (props) => {
   const backServer = process.env.REACT_APP_BACK_SERVER;
   const boardContent = props.boardContent;
   const setBoardContent = props.setBoardContent;
+  const type = props.type;
   const editorRef = useRef(null);
   const changeValue = () => {
     const editorData = editorRef.current.getInstance().getHTML();
     setBoardContent(editorData);
   };
+  console.log(boardContent);
   const uploadImage = (file, callbackFunc) => {
     //비동기요청으로 이미지파일을 업로드하고, 업로드된 파일의 경로를 결과로 받아옴
     const form = new FormData();
@@ -33,7 +35,7 @@ const ToastEditor = (props) => {
   //console.log(boardContent);
   return (
     <div style={{ width: "100%", marginTop: "20px" }}>
-      {boardContent || boardContent === "" ? (
+      {type === 0 || (type === 1 && boardContent !== "") ? (
         <Editor
           ref={editorRef}
           initialValue={boardContent}

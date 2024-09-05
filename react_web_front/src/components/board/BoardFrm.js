@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 
 function BoardFrm(props) {
+  const backServer = process.env.REACT_APP_BACK_SERVER;
   const loginId = props.loginId;
   const boardTitle = props.boardTitle;
   const setBoardTitle = props.setBoardTitle;
@@ -8,6 +9,13 @@ function BoardFrm(props) {
   const setThumbnail = props.setThumbnail;
   const boardFile = props.boardFile;
   const setBoardFile = props.setBoardFile;
+  //수정인경우에 추가로 전송되는 데이터
+  const boardThumb = props.boardThumb;
+  const setboardThumb = props.setboardThumb;
+  const fileList = props.fileList;
+  const setFileList = props.setFileList;
+
+  console.log(boardThumb);
 
   const thumbnailRef = useRef(null);
   //썸네일 미리보기용 state(데이터 전송하지 않음)
@@ -57,6 +65,13 @@ function BoardFrm(props) {
               thumbnailRef.current.click();
             }}
             src={boardImg}
+          />
+        ) : boardThumb ? (
+          <img
+            src={`${backServer}/board/thumb/${boardThumb}`}
+            onClick={() => {
+              thumbnailRef.current.click();
+            }}
           />
         ) : (
           <img
