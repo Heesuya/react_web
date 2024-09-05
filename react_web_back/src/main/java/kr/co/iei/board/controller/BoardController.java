@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -122,6 +123,41 @@ public class BoardController {
 			return ResponseEntity.ok(1);
 		}else {
 			return ResponseEntity.ok(0);
+		}
+	}
+	@PatchMapping
+	public ResponseEntity<Boolean> updateBoard(@ModelAttribute BoardDTO board, 
+										@ModelAttribute MultipartFile thumbnail, 
+										@ModelAttribute MultipartFile[] boardFile){
+		//System.out.println(board.getDelBoardFileNo());
+		if(thumbnail != null) { //썸네일 작업
+			String savepath = root+"/board/thumb/";
+			String filepath = fileUtil.upload(savepath, thumbnail);
+			board.setBoardThumb(filepath);
+		}
+		List<BoardFileDTO> boardFileList = new ArrayList<BoardFileDTO>();
+		if(boardFile != null) {//새첨부파일 작업
+			String savepath = root+"/board/";
+			for(MultipartFile file : boardFile) {
+				BoardFileDTO boardFileDTO = new BoardFileDTO();
+				String filename = file.getOriginalFilename();
+				String filepath = fileUtil.upload(savepath, file);
+				boardFileDTO.setFilename(filename);
+				boardFileDTO.setFilepath(filepath);
+				boardFileDTO.setBoardNo(board.getBoardNo());
+				boardFileList.add(boardFileDTO);
+			}
+		}
+		List<BoardFileDTO> delFileList = boardServcie.updateBoard(board, boardFileList);
+		if(delFileList != null) {
+			String savepath = root+"/board/";
+			for(BoardFileDTO deleteFile : delFileList) {
+				File delFile = new File(savepath+deleteFile.getFilepath());
+				delFile.delete();
+			}
+			return ResponseEntity.ok(true);
+		}else {
+			return ResponseEntity.ok(false);
 		}
 	}
 }

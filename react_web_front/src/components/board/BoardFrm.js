@@ -14,6 +14,8 @@ function BoardFrm(props) {
   const setboardThumb = props.setboardThumb;
   const fileList = props.fileList;
   const setFileList = props.setFileList;
+  const delBoardFileNo = props.delBoardFileNo;
+  const setDelBoardFileNo = props.setDelBoardFileNo; //디자인 비슷하게 쓰기 위해 한component 에서 함. 따로 두개 만들어서도 됨
 
   console.log(boardThumb);
 
@@ -133,6 +135,34 @@ function BoardFrm(props) {
               <th>첨부파일 목록</th>
               <td>
                 <div className="board-file-wrap">
+                  {fileList
+                    ? fileList.map((boardFile, i) => {
+                        const deleteFile = () => {
+                          const newFileList = fileList.filter((item) => {
+                            return item !== boardFile;
+                          });
+                          setFileList(newFileList); //화면에 반영
+                          //Controller로 전송하기위해서 배열에 추가
+                          setDelBoardFileNo([
+                            ...delBoardFileNo,
+                            boardFile.boardFileNo,
+                          ]);
+                        };
+                        return (
+                          <p key={"oldFile-" + i}>
+                            <span className="filename">
+                              {boardFile.filename}
+                            </span>
+                            <span
+                              className="material-icons del-file-icon"
+                              onClick={deleteFile}
+                            >
+                              delete
+                            </span>
+                          </p>
+                        );
+                      })
+                    : ""}
                   {showBoardFile.map((filename, i) => {
                     const deleteFile = () => {
                       boardFile.splice(i, 1);
