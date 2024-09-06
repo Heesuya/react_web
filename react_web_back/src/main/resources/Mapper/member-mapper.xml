@@ -37,4 +37,7 @@
 				from member_tbl order by member_name)m)
 		where rnum between #{start} and #{end}
 	</select>
+	<update id="changeMemberType">
+		update member_tbl set member_type = #{memberType} where member_id = #{memberId}
+	</update>
 </mapper>

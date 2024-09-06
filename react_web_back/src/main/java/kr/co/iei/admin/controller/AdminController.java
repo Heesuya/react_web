@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.iei.admin.model.service.AdminServcie;
 import kr.co.iei.board.model.dto.BoardDTO;
+import kr.co.iei.member.model.dto.MemberDTO;
 
 @CrossOrigin("*")
 @RestController
@@ -36,5 +37,11 @@ public class AdminController {
 	public ResponseEntity<Map> adminMemberList(@PathVariable int reqPage){
 		Map map = adminservice.selectAdminMemberList(reqPage);
 		return ResponseEntity.ok(map);
+	}
+	@PatchMapping(value = "/memberType")
+	public ResponseEntity<Integer> changeMemberType(@RequestBody MemberDTO member){
+		//System.out.println("member.getMemberType()"+member.getMemberType());
+		int result = adminservice.changeMemberType(member);
+		return ResponseEntity.ok(result);
 	}
 }
