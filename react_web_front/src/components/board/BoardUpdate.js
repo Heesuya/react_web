@@ -33,7 +33,7 @@ const BoardUpdate = () => {
     axios
       .get(`${backServer}/board/boardNo/${boardNo}`) //만들어져있는 거 사용~.~해서 데이터 가져옴
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         setBoardTitle(res.data.boardTitle);
         setBoardContent(res.data.boardContent);
         setboardThumb(res.data.boardThumb);
@@ -48,7 +48,7 @@ const BoardUpdate = () => {
     // console.log(boardContent);
     // console.log(thumbnail);
     // console.log(boardFile);
-    console.log("delBoardFileNo" + delBoardFileNo);
+    //console.log("delBoardFileNo" + delBoardFileNo);
     // console.log(boardNo);
     if (boardTitle !== "" && boardContent !== "") {
       const form = new FormData();
