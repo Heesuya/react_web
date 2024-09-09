@@ -10,7 +10,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>08_exam</artifactId>
+	<artifactId>react_web_back</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>react_web_back</name>
 	<description>Demo project for Spring Boot</description>
@@ -30,9 +30,11 @@
 	<properties>
 		<java.version>17</java.version>
 	</properties>
-	<!-- 웹소캣 추가  -->
+	<packaging>jar</packaging>
+	
 	<dependencies>
 	
+	<!-- 웹소캣 추가  -->
 		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-websocket -->
 		<dependency>
     		<groupId>org.springframework.boot</groupId>
